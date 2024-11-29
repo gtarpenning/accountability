@@ -9,4 +9,4 @@ setup(
         "uvicorn",
         "robin_stocks",
     ],
-) 
+)

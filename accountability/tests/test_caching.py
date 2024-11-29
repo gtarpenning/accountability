@@ -1,7 +1,7 @@
 import pytest
 import time
 from unittest.mock import patch, MagicMock
-from accountability.caching import cache_result
+from caching import cache_result
 from datetime import datetime
 
 @pytest.fixture

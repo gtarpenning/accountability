@@ -32,9 +32,9 @@ check: format lint typecheck test ruff
 # Format and lint code in sequence
 format-lint:
 	pip install black ruff pylint
-	black accountability
-	pylint accountability
-	ruff check accountability --fix
+	black .
+	pylint .
+	ruff check . --fix
 
 # Run tests with coverage
 test: dev-install
@@ -59,7 +59,6 @@ run-frontend:
 
 # Run both services in parallel using background processes
 run:
-	uvicorn main:app --reload --port 8000 & \
 	streamlit run streamlit_app.py & \
 	wait
 

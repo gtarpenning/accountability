@@ -11,7 +11,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import robin_stocks.robinhood as rh
 
-from accountability.rh_api import get_historical_portfolio_percentage, get_running_ytd_percentage
+from accountability.rh_api import (
+    get_historical_portfolio_percentage,
+    get_running_ytd_percentage,
+)
 from accountability.rh_types import (
     PercentageDate,
     FidelityType,

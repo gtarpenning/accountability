@@ -10,6 +10,8 @@ import time
 import os
 from multiprocessing import Process
 
+BASE_URL = "http://localhost:8000"
+
 # Configure the page
 st.set_page_config(
     page_title="Griffin's accountability dashboard", page_icon="📈", layout="wide"
@@ -67,30 +69,31 @@ bounds = "regular"
 # Add this function near the top of the file, after imports
 def start_fastapi_server():
     """Start the FastAPI server as a subprocess"""
-    # Import and run the FastAPI app
-    from accountability.main import app
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    subprocess.Popen(
+        [sys.executable, "-m", "uvicorn", "accountability.main:app", "--host", "0.0.0.0", "--port", "8000"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
 
-# Add this code block right after the imports, before the st.set_page_config
-if os.environ.get('STREAMLIT_RUN_MODE', '') != 'test':
-    # Start FastAPI in a separate process
-    server_process = Process(target=start_fastapi_server)
-    server_process.start()
+if __name__ == '__main__':
+    from multiprocessing import freeze_support
+    freeze_support()
     
-    # Give the server a moment to start
-    time.sleep(2)
+    if os.environ.get('STREAMLIT_RUN_MODE', '') != 'test':
+        # Start FastAPI in a separate process
+        server_process = Process(target=start_fastapi_server)
+        server_process.start()
+        
+        # Give the server a moment to start
+        time.sleep(2)
 
-    # Update the requests URL to use relative path
-    BASE_URL = "http://localhost:8000"
-    
-    # Register cleanup handler
-    def cleanup():
-        server_process.terminate()
-        server_process.join()
-    
-    import atexit
-    atexit.register(cleanup)
+        # Register cleanup handler
+        def cleanup():
+            server_process.terminate()
+            server_process.join()
+        
+        import atexit
+        atexit.register(cleanup)
 
 # Function to fetch data from the FastAPI backend
 @st.cache_data(ttl=300)  # Cache the data for 5 minutes
