@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+plotly
+robin_stocks
+pytest
+pytest-asyncio
+httpx
+pytest-cov
+setuptools
